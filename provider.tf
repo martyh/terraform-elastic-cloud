@@ -22,8 +22,21 @@ provider "elasticstack" {
   elasticsearch {}
 }
 
-provider "google" {
-  project = "arctic-system-109107"
+variable "google_project" {
+ type        = string
+ description = "The google project id"
+ default     = "artic-clone"
+}
+
+variable "google_region" {
+ type        = string
+ description = "The google region"
+ default     = "us-central1"
+}
+
+provider "google-beta" {
+  project = "artic-clone"
+  credentials = "/Users/martyhenderson/.config/gcloud/artic-clone.json"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
