@@ -6,9 +6,23 @@ resource "ec_deployment" "cluster" {
   version                = data.ec_stack.latest.version
   deployment_template_id = "gcp-storage-optimized"
 
+  traffic_filter = [
+    ec_deployment_traffic_filter.gcp_psc.id
+  ]
+
   elasticsearch {}
 
   kibana {}
+}
+
+resource "ec_deployment_traffic_filter" "gcp_psc" {
+  name   = "GCP private service connect"
+  region = "gcp-us-central1"
+  type   = "gcp_private_service_connect_endpoint"
+
+  rule {
+    source = google_compute_forwarding_rule.managed_es_psc_test.psc_connection_id
+  }
 }
 
 data "ec_stack" "latest" {
